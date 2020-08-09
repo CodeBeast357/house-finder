@@ -1,0 +1,17 @@
+#syntax=docker/dockerfile:experimental
+
+FROM golang:alpine3.12 as builder
+
+RUN mkdir /house-finder-src
+WORKDIR /house-finder-src
+
+COPY go.mod go.sum /house-finder-src/
+RUN --mount=type=cache,target=/root/.cache/go-build,id=go-build-cache GOPROXY=https://proxy.golang.org go mod download
+
+RUN --mount=type=cache,target=/root/.cache/go-build,id=go-build-cache go get github.com/githubnemo/CompileDaemon
+
+COPY src /house-finder-src/src/
+COPY src/house-finder/data /house-finder/data
+RUN mkdir /data
+
+ENTRYPOINT CompileDaemon --build="go build ./src/main.go" --command=./main

@@ -1,0 +1,43 @@
+[webserver]
+port = ":8080"
+uri_prefix = "/tiles"
+
+# register data providers
+[[providers]]
+database = "house_finder" # postgis database name
+host = "house_finder_db" # postgis database host
+name = "house_finder" # provider name is referenced from map layers
+password = "root" # postgis database password
+port = 5432 # postgis database port
+srid = 4326 # The default srid for this provider. If not provided it will be WebMercator (3857)
+type = "postgis" # the type of data provider. currently only supports postgis
+user = "root" # postgis database user
+
+[[providers.layers]]
+fields = ["house_id", "arrondissement"]
+geometry_fieldname = "coordinates"
+id_fieldname = "id"
+name = "houses"
+sql = "SELECT ST_AsBinary(coordinates) AS coordinates, id, id as house_id, arrondissement FROM houses WHERE coordinates && !BBOX!"
+
+[[providers.layers]]
+geometry_fieldname = "wkb_geometry"
+id_fieldname = "id"
+name = "schools"
+sql = "SELECT ST_AsBinary(wkb_geometry) AS wkb_geometry, ogc_fid FROM schools WHERE wkb_geometry && !BBOX!"
+
+[[maps]]
+name = "houses"
+
+[[maps.layers]]
+max_zoom = 20
+min_zoom = 0
+provider_layer = "house_finder.houses"
+
+[[maps]]
+name = "schools"
+
+[[maps.layers]]
+max_zoom = 20
+min_zoom = 0
+provider_layer = "house_finder.schools"

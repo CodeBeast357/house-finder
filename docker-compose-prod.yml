@@ -1,0 +1,75 @@
+version: "3.8"
+services:
+  traefik:
+    # The official v2 Traefik docker image
+    image: traefik:v2.2
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  app:
+    image: house-finder-app:prod-latest
+    build:
+      context: app
+    expose:
+      - 8080
+    environment:
+      VUE_APP_MAPBOX_TOKEN: ${MAPBOX_TOKEN}
+    labels:
+      - "traefik.http.middlewares.app.stripprefix.prefixes=/app"
+      - "traefik.http.routers.app.rule=PathPrefix(`/app`)"
+      - "traefik.http.routers.app.middlewares=app@docker"
+  service:
+    image: house-finder-service:prod-latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 8080
+    environment:
+      MAPBOX_TOKEN: ${MAPBOX_TOKEN}
+    labels:
+      - "traefik.http.middlewares.service.stripprefix.prefixes=/service"
+      - "traefik.http.routers.service.rule=PathPrefix(`/service`)"
+      - "traefik.http.routers.service.middlewares=service@docker"
+  house_finder_db:
+    environment:
+      POSTGRES_DB: house_finder
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test:
+        - CMD
+        - pg_isready
+      timeout: 30s
+    image: postgis/postgis:13-master
+    restart: always
+    volumes:
+      - house-db:/var/lib/postgresql/data:rw
+  tegola:
+    image: house-finder-tegola:prod-latest
+    build:
+      context: tegola
+    restart: always
+    expose:
+      - 8080
+    volumes:
+      - house-db:/var/lib/postgresql/data:rw
+    labels:
+      - "traefik.http.routers.tegola.rule=PathPrefix(`/tiles`)"
+  db-schema:
+    image: db-schema:prod-latest
+    build:
+      context: db
+    restart: on-failure:10
+
+volumes:
+  house-db: {}

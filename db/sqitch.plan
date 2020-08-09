@@ -1,0 +1,5 @@
+%syntax-version=1.0.0
+%project=house_finder
+
+appschema 2020-11-02T21:30:07Z massintha azamoum <massintha@massinthas-MacBook-Pro> # Add houses table.
+schools 2020-11-21T22:19:08Z massintha azamoum <massintha@massinthas-MacBook-Pro> # Add schools.
