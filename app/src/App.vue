@@ -1,10 +1,12 @@
 <template>
   <v-app id="app">
     <FilterPanel />
+    <LayerPanel />
     <v-toolbar dense max-height="48px">
-      <v-btn v-on:click="setShouldShowFilterPanel(!shouldShowFilterPanel)">
-        filters
-      </v-btn>
+      <v-btn-toggle v-on:change="setPanelValue" :value="panelValue" tile group>
+        <v-btn value="filter"> filters </v-btn>
+        <v-btn value="layer"> Layers </v-btn>
+      </v-btn-toggle>
       <v-spacer></v-spacer>
       <v-progress-circular
         v-if="isSyncLoading"
@@ -32,22 +34,23 @@
 <script lang="ts">
 import Vue from "vue";
 import FilterPanel from "./components/filters/FilterPanel.vue";
+import LayerPanel from "./components/layers/LayerPanel.vue";
 import HouseList from "./components/house_list/HouseList.vue";
 import Map from "./components/map/Map.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
   name: "App",
-  components: { FilterPanel, HouseList, Map },
+  components: { FilterPanel, HouseList, LayerPanel, Map },
   computed: {
     ...mapState("house", ["isSyncLoading"]),
-    ...mapState("ui", ["shouldShowFilterPanel"]),
+    ...mapState("ui", ["panelValue"]),
     ...mapGetters("house", ["houseListLength"]),
     ...mapGetters("house", ["houseListLength"]),
   },
   methods: {
     ...mapActions("house", ["fetchSelectedHouse", "syncHouses"]),
-    ...mapMutations("ui", ["setShouldShowFilterPanel"]),
+    ...mapMutations("ui", ["setPanelValue"]),
   },
   mounted() {
     this.fetchSelectedHouse();

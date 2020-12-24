@@ -1,5 +1,7 @@
 import mapboxgl from "mapbox-gl";
 
+export const SCHOOL_LAYER_ID = "schools";
+
 export const addSchoolLayer = (mapInstance: mapboxgl.Map): void => {
   mapInstance.addImage(
     "school",
@@ -11,13 +13,14 @@ export const addSchoolLayer = (mapInstance: mapboxgl.Map): void => {
   });
 
   mapInstance.addLayer({
-    id: "schools",
+    id: SCHOOL_LAYER_ID,
     type: "symbol",
     source: "schools",
     "source-layer": "schools",
     layout: {
       "icon-image": "school",
       "icon-allow-overlap": true,
+      visibility: "none",
     },
   });
 };

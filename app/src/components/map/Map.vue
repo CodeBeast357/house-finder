@@ -24,6 +24,7 @@ import {
   updateHouseLayer,
   updateStarHouseLayer,
 } from "../../services/map/layers/house_layer";
+import { toggleSchoolsLayer } from "../../services/map/layers/utils";
 import { addSchoolLayer } from "../../services/map/layers/schools";
 import { House } from "../../store/modules/house";
 
@@ -31,6 +32,7 @@ export default {
   name: "Map",
   computed: {
     ...mapState("map", ["selectedHouseId", "boundingBox"]),
+    ...mapState("layer", ["schools"]),
     ...mapGetters("house", ["partitionHouseBySweetSpotness"]),
   },
   methods: {
@@ -69,10 +71,13 @@ export default {
       newHouseList: House[][],
       oldHouseList: House[][]
     ): void {
-      if (newHouseList && newHouseList != oldHouseList) {
+      if (this.mapInstance && newHouseList && newHouseList != oldHouseList) {
         updateHouseLayer(newHouseList[1], this.mapInstance);
         updateStarHouseLayer(newHouseList[0], this.mapInstance);
       }
+    },
+    schools: function (schools: boolean): void {
+      toggleSchoolsLayer(schools, this.mapInstance);
     },
   },
 };

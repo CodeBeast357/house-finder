@@ -1,26 +1,26 @@
 <template>
   <v-slide-x-transition>
-    <div v-if="shouldShowFilterPanel" class="filter-overaly">
-      <FilterForm />
+    <div v-if="shouldShowLayerPanel" class="layer-overaly">
+      <LayerToggles />
     </div>
   </v-slide-x-transition>
 </template>
 
 <script lang="ts">
 import { mapState } from "vuex";
-import FilterForm from "./FilterForm.vue";
+import LayerToggles from "./LayerToggles.vue";
 
 export default {
-  name: "FilterPanel",
-  components: { FilterForm },
+  name: "LayerPanel",
+  components: { LayerToggles },
   computed: {
-    ...mapState("ui", ["shouldShowFilterPanel"]),
+    ...mapState("ui", ["shouldShowLayerPanel"]),
   },
 };
 </script>
 
 <style>
-.filter-overaly {
+.layer-overaly {
   position: absolute;
   width: 23rem;
   height: 100%;

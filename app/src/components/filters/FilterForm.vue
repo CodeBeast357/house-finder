@@ -4,7 +4,7 @@
       <v-row>
         <v-col md="10" class="text-h5"> Filters </v-col>
         <v-col md="2">
-          <v-btn icon v-on:click="setShouldShowFilterPanel(false)">
+          <v-btn icon v-on:click="setPanelValue()">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-col>
@@ -124,7 +124,7 @@ export default {
       "setSweetSpotOnly",
       "setPriceFilter",
     ]),
-    ...mapMutations("ui", ["setShouldShowFilterPanel"]),
+    ...mapMutations("ui", ["setPanelValue"]),
   },
   mounted(): void {
     embed(
