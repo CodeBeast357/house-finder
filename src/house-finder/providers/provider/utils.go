@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/url"
@@ -35,4 +36,13 @@ func ParsePrice(priceText string) int {
 	}
 
 	return price
+}
+
+func ParseAddress(addressText string) string {
+	streetNumberReg := regexp.MustCompile("\\d+")
+	tempStreeName := streetNumberReg.Split(addressText, -1)
+	streetName := tempStreeName[len(tempStreeName)-1]
+	streetNumber := streetNumberReg.FindString(addressText)
+
+	return fmt.Sprintf("%v %v", streetNumber, streetName)
 }

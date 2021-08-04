@@ -94,7 +94,7 @@ func triggerResultCollector(resultCollector *colly.Collector, startPosition int)
 }
 
 func getHouseItem(r *colly.Response, propertyDoc *goquery.Selection) *house.House {
-	address := propertyDoc.Find(".address > div:nth-of-type(1)").Text()
+	address := provider.ParseAddress(propertyDoc.Find(".address > div:nth-of-type(1)").Text())
 	price := provider.ParsePrice(propertyDoc.Find(".price > span").Text())
 	linkAttr, _ := propertyDoc.Find(".a-more-detail").Attr("href")
 	link := r.Request.AbsoluteURL(linkAttr)

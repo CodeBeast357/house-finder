@@ -19,7 +19,7 @@ func GetHouses(arrondissement provider.ArrondissementFilter) []*house.House {
 	houses := make([]*house.House, 0)
 
 	c.OnHTML(".property-entry", func(e *colly.HTMLElement) {
-		address := strings.Split(e.ChildText(".property-address > h2"), ",")[0]
+		address := provider.ParseAddress(strings.Split(e.ChildText(".property-address > h2"), ",")[0])
 		price := provider.ParsePrice(e.ChildText(".property-price"))
 		link := e.Request.AbsoluteURL(e.ChildAttr(".property-details", "href"))
 		thumbnailLink := e.ChildAttr(".property-thumbnail > img", "src")

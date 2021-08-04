@@ -75,7 +75,7 @@ func triggerResultCollector(arrondissement provider.ArrondissementFilter, result
 }
 
 func getHouseItem(e *colly.HTMLElement) *house.House {
-	address := e.ChildText(".search-results-listings-list__item-description__address")
+	address := provider.ParseAddress(e.ChildText(".search-results-listings-list__item-description__address"))
 	price := provider.ParsePrice(e.ChildText(".search-results-listings-list__item-description__price"))
 	link := e.Request.AbsoluteURL(e.ChildAttr(".search-results-listings-list__item-image-link ", "href"))
 	thumbnailLink := e.ChildAttr(".search-results-listings-list__item-photo", "src")
