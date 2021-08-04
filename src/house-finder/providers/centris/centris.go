@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -96,9 +94,8 @@ func triggerResultCollector(resultCollector *colly.Collector, startPosition int)
 }
 
 func getHouseItem(r *colly.Response, propertyDoc *goquery.Selection) *house.House {
-	priceReg, _ := regexp.Compile("[^0-9]+")
 	address := propertyDoc.Find(".address > div:nth-of-type(1)").Text()
-	price, _ := strconv.Atoi(priceReg.ReplaceAllString(propertyDoc.Find(".price > span").Text(), ""))
+	price := provider.ParsePrice(propertyDoc.Find(".price > span").Text())
 	linkAttr, _ := propertyDoc.Find(".a-more-detail").Attr("href")
 	link := r.Request.AbsoluteURL(linkAttr)
 	thumbnailLink, _ := propertyDoc.Find(".thumbnail > a > img").Attr("src")
@@ -143,11 +140,11 @@ func getPayload(arrondissement provider.ArrondissementFilter) string {
 	}`
 
 	arrondissementFilter := map[provider.ArrondissementFilter]map[string]string{
-		provider.Ahunstic:      map[string]string{"matchType": "CityDistrictNeighbourhoodSearch", "id": "D;840", "text": "Quartier Ahuntsic Ouest, Montréal (Ahuntsic-Cartierville)", "propertyType": plexFilters},
-		provider.MontRoyal:     map[string]string{"matchType": "CityDistrictNeighbourhoodSearch", "id": "D;842", "text": "Quartier Mile-End, Montréal (Le Plateau-Mont-Royal)", "propertyType": plexFilters},
-		provider.Rosemont:      map[string]string{"matchType": "CityDistrictNeighbourhoodSearch", "id": "G;844", "text": "Quartier Petite Italie, Montréal (Rosemont/La Petite-Patrie)", "propertyType": plexFilters},
-		provider.Villeray:      map[string]string{"matchType": "CityDistrictNeighbourhoodSearch", "id": "A;841", "text": "Quartier Villeray, Montréal (Villeray/Saint-Michel/Parc-Extension)", "propertyType": plexFilters},
-		provider.TroisRivieres: map[string]string{"matchType": "CityDistrict", "id": "449", "text": "Trois-Rivières", "propertyType": homeFilters},
+		provider.Ahunstic:      {"matchType": "CityDistrictNeighbourhoodSearch", "id": "D;840", "text": "Quartier Ahuntsic Ouest, Montréal (Ahuntsic-Cartierville)", "propertyType": plexFilters},
+		provider.MontRoyal:     {"matchType": "CityDistrictNeighbourhoodSearch", "id": "D;842", "text": "Quartier Mile-End, Montréal (Le Plateau-Mont-Royal)", "propertyType": plexFilters},
+		provider.Rosemont:      {"matchType": "CityDistrictNeighbourhoodSearch", "id": "G;844", "text": "Quartier Petite Italie, Montréal (Rosemont/La Petite-Patrie)", "propertyType": plexFilters},
+		provider.Villeray:      {"matchType": "CityDistrictNeighbourhoodSearch", "id": "A;841", "text": "Quartier Villeray, Montréal (Villeray/Saint-Michel/Parc-Extension)", "propertyType": plexFilters},
+		provider.TroisRivieres: {"matchType": "CityDistrict", "id": "449", "text": "Trois-Rivières", "propertyType": homeFilters},
 	}
 	return fmt.Sprintf(`{
 		"query": {

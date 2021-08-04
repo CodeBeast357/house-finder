@@ -20,7 +20,7 @@ func GetHouses(arrondissement provider.ArrondissementFilter) []*house.House {
 
 	c.OnHTML(".property-entry", func(e *colly.HTMLElement) {
 		address := strings.Split(e.ChildText(".property-address > h2"), ",")[0]
-		price, _ := strconv.Atoi(strings.ReplaceAll(strings.ReplaceAll(e.ChildText(".property-price"), "$", ""), ",", ""))
+		price := provider.ParsePrice(e.ChildText(".property-price"))
 		link := e.Request.AbsoluteURL(e.ChildAttr(".property-details", "href"))
 		thumbnailLink := e.ChildAttr(".property-thumbnail > img", "src")
 		house := &house.House{
@@ -45,17 +45,17 @@ func GetHouses(arrondissement provider.ArrondissementFilter) []*house.House {
 	})
 
 	arrondissementFilter := map[provider.ArrondissementFilter]map[string][]string{
-		provider.Ahunstic:      map[string][]string{"cities": {"66506"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
-		provider.MontRoyal:     map[string][]string{"cities": {"66508"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
-		provider.Rosemont:      map[string][]string{"cities": {"6651171"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
-		provider.Villeray:      map[string][]string{"cities": {"66507"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
-		provider.TroisRivieres: map[string][]string{"cities": {"37067", "37055", "37070", "37075", "37050", "37060"}, "regions": {"4"}, "categories": {"plex"}, "genres": {"1", "2", "3"}},
+		provider.Ahunstic:      {"cities": {"66506"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
+		provider.MontRoyal:     {"cities": {"66508"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
+		provider.Rosemont:      {"cities": {"6651171"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
+		provider.Villeray:      {"cities": {"66507"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
+		provider.TroisRivieres: {"cities": {"37067", "37055", "37070", "37075", "37050", "37060"}, "regions": {"4"}, "categories": {"plex"}, "genres": {"1", "2", "3"}},
 	}
 
 	formData := provider.CreateFormReader(map[string][]string{
-		"mode":                   []string{"criterias"},
-		"order":                  []string{"date_desc"},
-		"query":                  []string{""},
+		"mode":                   {"criterias"},
+		"order":                  {"date_desc"},
+		"query":                  {""},
 		"categorie":              arrondissementFilter[arrondissement]["categories"],
 		"selectItemcategorie":    arrondissementFilter[arrondissement]["categories"],
 		"genres":                 arrondissementFilter[arrondissement]["genres"],
@@ -64,12 +64,12 @@ func GetHouses(arrondissement provider.ArrondissementFilter) []*house.House {
 		"selectItemregionIds":    arrondissementFilter[arrondissement]["regions"],
 		"cityIds":                arrondissementFilter[arrondissement]["cities"],
 		"selectItemcityIds":      arrondissementFilter[arrondissement]["cities"],
-		"minPrice":               []string{strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Min)},
-		"selectItemminPrice":     []string{strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Min)},
-		"maxPrice":               []string{strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Max)},
-		"selectItemmaxPrice":     []string{strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Max)},
-		"transacTypes":           []string{"vente"},
-		"selectItemtransacTypes": []string{"vente"},
+		"minPrice":               {strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Min)},
+		"selectItemminPrice":     {strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Min)},
+		"maxPrice":               {strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Max)},
+		"selectItemmaxPrice":     {strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Max)},
+		"transacTypes":           {"vente"},
+		"selectItemtransacTypes": {"vente"},
 	})
 
 	c.Request("POST", "https://www.remax-quebec.com/en/recherche/plex/resultats.rmx", formData, nil, nil)

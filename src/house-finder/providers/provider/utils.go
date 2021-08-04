@@ -2,7 +2,10 @@ package provider
 
 import (
 	"io"
+	"log"
 	"net/url"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -21,4 +24,15 @@ func CreateQueryString(data map[string][]string) string {
 	}
 
 	return form.Encode()
+}
+
+func ParsePrice(priceText string) int {
+	priceReg, _ := regexp.Compile("[^0-9]+")
+	price, err := strconv.Atoi(priceReg.ReplaceAllString(priceText, ""))
+
+	if err != nil {
+		log.Fatal("could not parse price ", priceText)
+	}
+
+	return price
 }

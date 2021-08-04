@@ -3,7 +3,6 @@ package duproprio
 import (
 	"log"
 	"net/url"
-	"regexp"
 	"strconv"
 	"strings"
 
@@ -48,26 +47,26 @@ func GetHouses(arrondissement provider.ArrondissementFilter) []*house.House {
 
 func triggerResultCollector(arrondissement provider.ArrondissementFilter, resultCollector *colly.Collector) func(pageNumber int) {
 	arrondissementFilter := map[provider.ArrondissementFilter]map[string][]string{
-		provider.Ahunstic:      map[string][]string{"cities": {"1893"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
-		provider.MontRoyal:     map[string][]string{"cities": {"1887"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
-		provider.Rosemont:      map[string][]string{"cities": {"1889"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
-		provider.Villeray:      map[string][]string{"cities": {"1892"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
-		provider.TroisRivieres: map[string][]string{"cities": {"1037"}, "type": {"house", "condo"}, "subtype": {"1", "2", "4", "5", "6", "7", "9", "10", "11", "13", "15", "17", "19", "21", "97", "99", "100", "3", "12", "14", "105"}},
+		provider.Ahunstic:      {"cities": {"1893"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
+		provider.MontRoyal:     {"cities": {"1887"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
+		provider.Rosemont:      {"cities": {"1889"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
+		provider.Villeray:      {"cities": {"1892"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
+		provider.TroisRivieres: {"cities": {"1037"}, "type": {"house", "condo"}, "subtype": {"1", "2", "4", "5", "6", "7", "9", "10", "11", "13", "15", "17", "19", "21", "97", "99", "100", "3", "12", "14", "105"}},
 	}
 
 	return func(pageNumber int) {
 		queryString := provider.CreateQueryString(map[string][]string{
-			"search":        []string{"true"},
+			"search":        {"true"},
 			"cities[]":      arrondissementFilter[arrondissement]["cities"],
-			"min_price":     []string{strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Min)},
-			"max_price":     []string{strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Max)},
+			"min_price":     {strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Min)},
+			"max_price":     {strconv.Itoa(provider.ArrondissementPriceFilter[arrondissement].Max)},
 			"type[]":        arrondissementFilter[arrondissement]["type"],
 			"subtype[]":     arrondissementFilter[arrondissement]["subtype"],
-			"is_for_sale":   []string{"1"},
-			"with_builders": []string{"1"},
-			"parent":        []string{"1"},
-			"pageNumber":    []string{strconv.Itoa(pageNumber)},
-			"sort":          []string{"-published_at"},
+			"is_for_sale":   {"1"},
+			"with_builders": {"1"},
+			"parent":        {"1"},
+			"pageNumber":    {strconv.Itoa(pageNumber)},
+			"sort":          {"-published_at"},
 		})
 		base, _ := url.Parse("https://duproprio.com/fr/rechercher/liste")
 		base.RawQuery = queryString
@@ -77,8 +76,7 @@ func triggerResultCollector(arrondissement provider.ArrondissementFilter, result
 
 func getHouseItem(e *colly.HTMLElement) *house.House {
 	address := e.ChildText(".search-results-listings-list__item-description__address")
-	priceReg, _ := regexp.Compile("[^0-9]+")
-	price, _ := strconv.Atoi(priceReg.ReplaceAllString(e.ChildText(".search-results-listings-list__item-description__price"), ""))
+	price := provider.ParsePrice(e.ChildText(".search-results-listings-list__item-description__price"))
 	link := e.Request.AbsoluteURL(e.ChildAttr(".search-results-listings-list__item-image-link ", "href"))
 	thumbnailLink := e.ChildAttr(".search-results-listings-list__item-photo", "src")
 	return &house.House{
