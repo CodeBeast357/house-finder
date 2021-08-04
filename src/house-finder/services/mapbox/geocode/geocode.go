@@ -132,7 +132,7 @@ func Forward(house *house.House, req *ForwardRequestOpts) (*ForwardResponse, err
 	resp := ForwardResponse{}
 	sanitizedPlace := strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(house.Address, " ", "+"), "/", "+"), ";", "")
 
-	queryString := fmt.Sprintf("%s/%s/%s/%s+%s.json", apiName, apiVersion, apiMode, sanitizedPlace, house.Arrondissement)
+	queryString := fmt.Sprintf("%s/%s/%s/%s+%s+%s.json", apiName, apiVersion, apiMode, sanitizedPlace, house.Arrondissement, "Montreal")
 	err = QueryBase(queryString, &v, &resp)
 
 	return &resp, err

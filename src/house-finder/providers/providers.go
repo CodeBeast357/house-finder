@@ -20,6 +20,7 @@ func SyncHouses(store *store.Store, geoTag *geotag.GeoTag) {
 	fmt.Println("Starting sync")
 
 	// arrondissementFilters := []provider.ArrondissementFilter{provider.Ahunstic, provider.MontRoyal, provider.Rosemont, provider.Villeray, provider.TroisRivieres}
+	// arrondissementFilters := []provider.ArrondissementFilter{provider.TroisRivieres}
 	arrondissementFilters := []provider.ArrondissementFilter{provider.Ahunstic, provider.MontRoyal, provider.Rosemont, provider.Villeray}
 	for _, arrondissement := range arrondissementFilters {
 		fmt.Println("Sync arrondissement ", arrondissement)

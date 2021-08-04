@@ -42,15 +42,21 @@ func SetupStore() (*Store, error) {
 // SaveHouseList saves into the DB the list of given houses
 func (store *Store) SaveHouseList(houseList []*models.House) error {
 	insertQuery := `
-        INSERT INTO houses(address, price, arrondissement, link, thumbnail_link, provider_name, coordinates, is_in_sweet_spot)
-        VALUES (:address, :price, :arrondissement, :link, :thumbnail_link, :provider_name, ST_Point(:longitude, :latitude), :is_in_sweet_spot)
-        ON CONFLICT DO NOTHING;
+        INSERT INTO houses(address, price, arrondissement, link, thumbnail_link, provider_name, coordinates, is_in_sweet_spot, sync_timestamp)
+        VALUES (:address, :price, :arrondissement, :link, :thumbnail_link, :provider_name, ST_Point(:longitude, :latitude), :is_in_sweet_spot, current_timestamp)
+        ON CONFLICT (address) DO
+		UPDATE SET sync_timestamp=EXCLUDED.sync_timestamp;
     `
 
 	tx := store.db.MustBegin()
 	for _, house := range houseList {
 		tx.NamedExec(insertQuery, house)
 	}
+
+	tx.Exec(`
+		DELETE FROM houses
+		WHERE sync_timestamp < current_timestamp - interval '15 minute'
+	`)
 	return tx.Commit()
 }
 
