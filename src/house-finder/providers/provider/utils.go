@@ -27,7 +27,7 @@ func CreateQueryString(data map[string][]string) string {
 }
 
 func ParsePrice(priceText string) int {
-	priceReg, _ := regexp.Compile("[^0-9]+")
+	priceReg := regexp.MustCompile("[^0-9]+")
 	price, err := strconv.Atoi(priceReg.ReplaceAllString(priceText, ""))
 
 	if err != nil {
