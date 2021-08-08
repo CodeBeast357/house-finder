@@ -41,8 +41,14 @@ func ParsePrice(priceText string) int {
 func ParseAddress(addressText string) string {
 	streetNumberReg := regexp.MustCompile("\\d+")
 	tempStreeName := streetNumberReg.Split(addressText, -1)
-	streetName := tempStreeName[len(tempStreeName)-1]
-	streetNumber := streetNumberReg.FindString(addressText)
+	streetName := removeNonAlphaNumeric(tempStreeName[len(tempStreeName)-1])
+	streetNumber := removeNonAlphaNumeric(streetNumberReg.FindString(addressText))
 
 	return fmt.Sprintf("%v %v", streetNumber, streetName)
+}
+
+func removeNonAlphaNumeric(stringToTreat string) string {
+	nonAlphaNumericReg := regexp.MustCompile("[^A-zÀ-ú\\d\\s-]")
+
+	return nonAlphaNumericReg.ReplaceAllString(stringToTreat, "")
 }
