@@ -9,5 +9,5 @@ prod:
 	docker-compose logs -f
 
 backup-db:
-	docker exec -it house-finder_house_finder_db_1 pg_dump -h house_finder_db -U root -d house_finder -f /root/house_finder.backup -F c -v --data-only
-	docker cp house-finder_house_finder_db_1:/root/house_finder.backup .
+	docker exec -it house-finder-house_finder_db-1 pg_dump -h house_finder_db -U root -d house_finder -f /root/house_finder.backup -F c -v --data-only
+	docker cp house-finder-house_finder_db-1:/root/house_finder.backup .

@@ -24,7 +24,7 @@ func GetHouses(arrondissement provider.ArrondissementFilter) []*house.House {
 	})
 
 	resultCollector.OnHTML(".search-results-listings-list__item", func(e *colly.HTMLElement) {
-		if strings.HasPrefix(e.Attr("id"), "listing") {
+		if strings.HasPrefix(e.Attr("id"), "listing") && !e.DOM.HasClass("is-sold") {
 			house := getHouseItem(e)
 			house.Arrondissement = arrondissement
 			houses = append(houses, house)

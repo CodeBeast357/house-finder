@@ -21,7 +21,7 @@ services:
     environment:
       VUE_APP_MAPBOX_TOKEN: ${MAPBOX_TOKEN}
     volumes:
-      - /Users/massintha/projects/house-finder/app:/app
+      - ${PWD}/app:/app
     expose:
       - 8080
     labels:
@@ -34,7 +34,7 @@ services:
     environment:
       MAPBOX_TOKEN: ${MAPBOX_TOKEN}
     volumes:
-      - /Users/massintha/projects/house-finder/src:/house-finder-src/src
+      - ${PWD}/src:/house-finder-src/src
     expose:
       - 8080
     labels:
