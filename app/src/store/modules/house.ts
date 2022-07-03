@@ -24,6 +24,7 @@ import {
   BLACKLIST_WHITE_FILTER,
   CREATION_DATE_3DAYS_FILTER,
   CREATION_DATE_7DAYS_FILTER,
+  CREATION_DATE_MORE_7DAYS_FILTER,
   CREATION_DATE_LAST_FOUND_FILTER,
 } from "../constants";
 
@@ -62,6 +63,7 @@ const filterIfTrue = cond([
 const isLastFound = isEqual(CREATION_DATE_LAST_FOUND_FILTER);
 const isLast3Days = isEqual(CREATION_DATE_3DAYS_FILTER);
 const isLast7Days = isEqual(CREATION_DATE_7DAYS_FILTER);
+const isMoreThan7Days = isEqual(CREATION_DATE_MORE_7DAYS_FILTER);
 
 const filterBlackList = cond([
   [isEqual(BLACKLIST_WHITE_FILTER), () => isEqual(false)],
@@ -85,6 +87,11 @@ const getters: GetterTree<State, any> = {
         isLast7Days,
         () => (creationDatetime) =>
           newestCreationDatetime - creationDatetime <= 3600 * 24 * 1000 * 7,
+      ],
+      [
+        isMoreThan7Days,
+        () => (creationDatetime) =>
+          newestCreationDatetime - creationDatetime > 3600 * 24 * 1000 * 7,
       ],
       [stubTrue, () => stubTrue],
     ]);
