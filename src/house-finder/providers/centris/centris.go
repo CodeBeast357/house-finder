@@ -120,11 +120,6 @@ func getPayload(arrondissement provider.ArrondissementFilter) string {
 		"value": "2X",
 		"fieldConditionId": "IsPlex",
 		"valueConditionId": ""
-	}, {
-		"fieldId": "Plex",
-		"value": "3X",
-		"fieldConditionId": "IsPlex",
-		"valueConditionId": ""
 	}`
 
 	homeFilters := `{
@@ -142,7 +137,7 @@ func getPayload(arrondissement provider.ArrondissementFilter) string {
 	arrondissementFilter := map[provider.ArrondissementFilter]map[string]string{
 		provider.Ahunstic:      {"matchType": "CityDistrictNeighbourhoodSearch", "id": "D;840", "text": "Quartier Ahuntsic Ouest, Montréal (Ahuntsic-Cartierville)", "propertyType": plexFilters},
 		provider.MontRoyal:     {"matchType": "CityDistrictNeighbourhoodSearch", "id": "D;842", "text": "Quartier Mile-End, Montréal (Le Plateau-Mont-Royal)", "propertyType": plexFilters},
-		provider.Rosemont:      {"matchType": "CityDistrictNeighbourhoodSearch", "id": "G;844", "text": "Quartier Petite Italie, Montréal (Rosemont/La Petite-Patrie)", "propertyType": plexFilters},
+		provider.Rosemont:      {"matchType": "CityDistrict", "id": "844", "text": "Montréal (Rosemont/La Petite-Patrie)", "propertyType": plexFilters},
 		provider.Villeray:      {"matchType": "CityDistrictNeighbourhoodSearch", "id": "A;841", "text": "Quartier Villeray, Montréal (Villeray/Saint-Michel/Parc-Extension)", "propertyType": plexFilters},
 		provider.TroisRivieres: {"matchType": "CityDistrict", "id": "449", "text": "Trois-Rivières", "propertyType": homeFilters},
 	}

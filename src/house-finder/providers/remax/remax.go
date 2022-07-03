@@ -45,10 +45,10 @@ func GetHouses(arrondissement provider.ArrondissementFilter) []*house.House {
 	})
 
 	arrondissementFilter := map[provider.ArrondissementFilter]map[string][]string{
-		provider.Ahunstic:      {"cities": {"66506"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
-		provider.MontRoyal:     {"cities": {"66508"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
-		provider.Rosemont:      {"cities": {"6651171"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
-		provider.Villeray:      {"cities": {"66507"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"2", "1"}},
+		provider.Ahunstic:      {"cities": {"66506"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"1"}},
+		provider.MontRoyal:     {"cities": {"66508"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"1"}},
+		provider.Rosemont:      {"cities": {"6651171"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"1"}},
+		provider.Villeray:      {"cities": {"66507"}, "regions": {"20"}, "categories": {"plex"}, "genres": {"1"}},
 		provider.TroisRivieres: {"cities": {"37067", "37055", "37070", "37075", "37050", "37060"}, "regions": {"4"}, "categories": {"plex"}, "genres": {"1", "2", "3"}},
 	}
 

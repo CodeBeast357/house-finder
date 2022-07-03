@@ -47,10 +47,10 @@ func GetHouses(arrondissement provider.ArrondissementFilter) []*house.House {
 
 func triggerResultCollector(arrondissement provider.ArrondissementFilter, resultCollector *colly.Collector) func(pageNumber int) {
 	arrondissementFilter := map[provider.ArrondissementFilter]map[string][]string{
-		provider.Ahunstic:      {"cities": {"1893"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
-		provider.MontRoyal:     {"cities": {"1887"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
-		provider.Rosemont:      {"cities": {"1889"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
-		provider.Villeray:      {"cities": {"1892"}, "type": {"multiplex"}, "subtype": {"52", "53"}},
+		provider.Ahunstic:      {"cities": {"1893"}, "type": {"multiplex"}, "subtype": {"52"}},
+		provider.MontRoyal:     {"cities": {"1887"}, "type": {"multiplex"}, "subtype": {"52"}},
+		provider.Rosemont:      {"cities": {"1889"}, "type": {"multiplex"}, "subtype": {"52"}},
+		provider.Villeray:      {"cities": {"1892"}, "type": {"multiplex"}, "subtype": {"52"}},
 		provider.TroisRivieres: {"cities": {"1037"}, "type": {"house", "condo"}, "subtype": {"1", "2", "4", "5", "6", "7", "9", "10", "11", "13", "15", "17", "19", "21", "97", "99", "100", "3", "12", "14", "105"}},
 	}
 

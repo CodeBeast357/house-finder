@@ -24,10 +24,10 @@ type priceFilter struct {
 
 // ArrondissementPriceFilter ArrondissementPriceFilter
 var ArrondissementPriceFilter = map[ArrondissementFilter]priceFilter{
-	Ahunstic:      {Min: 0, Max: 1500000},
-	MontRoyal:     {Min: 0, Max: 1500000},
-	Rosemont:      {Min: 0, Max: 1500000},
-	Villeray:      {Min: 0, Max: 1500000},
+	Ahunstic:      {Min: 0, Max: 800000},
+	MontRoyal:     {Min: 0, Max: 800000},
+	Rosemont:      {Min: 0, Max: 800000},
+	Villeray:      {Min: 0, Max: 800000},
 	TroisRivieres: {Min: 175000, Max: 400000},
 }
 
